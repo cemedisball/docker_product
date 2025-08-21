@@ -13,10 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  products Product[] 
+}
+
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
+  id          Int     @id @default(autoincrement())
+  name        String @unique
   description String?
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
   price       Float    @default(0.0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -25,9 +33,20 @@ model Product {
 
 model Order {
   id          Int      @id @default(autoincrement())
-  productId   Int
+  productId   Int       
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   product     Product @relation(fields: [productId], references: [id])
 }
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
 
